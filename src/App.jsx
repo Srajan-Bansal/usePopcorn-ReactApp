@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import StarRating from './StarRating';
 import './index.css';
@@ -23,27 +24,6 @@ const tempMovieData = [
 	},
 ];
 
-const tempWatchedData = [
-	{
-		imdbID: 'tt1375666',
-		Title: 'Inception',
-		Year: '2010',
-		Poster: 'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg',
-		runtime: 148,
-		imdbRating: 8.8,
-		userRating: 10,
-	},
-	{
-		imdbID: 'tt0088763',
-		Title: 'Back to the Future',
-		Year: '1985',
-		Poster: 'https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg',
-		runtime: 116,
-		imdbRating: 8.5,
-		userRating: 9,
-	},
-];
-
 const average = (arr) =>
 	arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
@@ -54,7 +34,7 @@ export default function App() {
 	const [watched, setWatched] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState('');
-	const [query, setQuery] = useState('interstellar');
+	const [query, setQuery] = useState('');
 	const [selectedId, setSelectedId] = useState(null);
 
 	function handleSelectMovie(id) {
@@ -75,9 +55,9 @@ export default function App() {
 				try {
 					setIsLoading(true);
 					setError('');
-					if (query.length < 3) {
-						return;
-					}
+					// if (query.length < 3) {
+					// 	return;
+					// }
 					const res = await fetch(
 						`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
 					);
@@ -262,14 +242,14 @@ function Movie({ movie, onSelectMovie }) {
 	return (
 		<li onClick={() => onSelectMovie(movie.imdbID)}>
 			<img
-				src={movie.poster}
-				alt={`${movie.title} poster`}
+				src={movie.Poster}
+				alt={`${movie.Title} poster`}
 			/>
-			<h3>{movie.title}</h3>
+			<h3>{movie.Title}</h3>
 			<div>
 				<p>
 					<span>🗓</span>
-					<span>{movie.year}</span>
+					<span>{movie.Year}</span>
 				</p>
 			</div>
 		</li>
@@ -314,9 +294,7 @@ function MovieDetails({ selectedId, onClosedMovie, onAddWatched, watched }) {
 		function () {
 			setIsLoading(true);
 			async function getMovieDetails() {
-				const res = await fetch(
-					`http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
-				);
+				const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`);
 				const data = await res.json();
 				setMovie(data);
 				setIsLoading(false);
@@ -364,7 +342,7 @@ function MovieDetails({ selectedId, onClosedMovie, onAddWatched, watched }) {
 								onSetRating={setUserRating}
 							/>
 						</div>
-						{userRating > 0 && (
+						{/* userRating > 0 */ (
 							<button
 								className='btn-add'
 								onClick={handleAdd}
